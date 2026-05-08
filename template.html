@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="theme-color" content="#fff0e1" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1a0f08" media="(prefers-color-scheme: dark)" />
+<title>Noticias CPGs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Paleta personalizada */
+    --bg: #fff0e1;
+    --bg-elevated: #fff7ec;
+    --bg-subtle: #ffe8d3;
+    --bg-hover: #ffe0c2;
+    --bg-card: #fff7ec;
+
+    --rule: #cc3300;
+    --rule-soft: rgba(204, 51, 0, 0.15);
+    --rule-faint: rgba(204, 51, 0, 0.08);
+
+    --text: #1a0f08;
+    --text-secondary: #5c3d2e;
+    --text-tertiary: #9c7a64;
+    --text-quaternary: #d4b8a3;
+
+    --primary: #cc3300;
+    --primary-hover: #a82900;
+    --primary-soft: rgba(204, 51, 0, 0.12);
+
+    --accent: #cc3300;
+    --accent-soft: rgba(204, 51, 0, 0.15);
+
+    --highlight: #ffd9b3;
+    --highlight-text: #5c1a00;
+
+    --shadow-xs: 0 1px 2px rgba(204, 51, 0, 0.06);
+    --shadow-sm: 0 1px 3px rgba(204, 51, 0, 0.08), 0 1px 2px rgba(204, 51, 0, 0.04);
+    --shadow: 0 4px 12px -2px rgba(204, 51, 0, 0.10), 0 2px 4px -1px rgba(204, 51, 0, 0.06);
+    --shadow-lg: 0 16px 40px -12px rgba(204, 51, 0, 0.20), 0 4px 12px -4px rgba(204, 51, 0, 0.10);
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 16px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+    /* Safe areas iPhone (notch/home indicator) */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  [data-theme="dark"] {
+    --bg: #1a0f08;
+    --bg-elevated: #261810;
+    --bg-subtle: #1f1209;
+    --bg-hover: #2e1d12;
+    --bg-card: #261810;
+
+    --rule: #ff5722;
+    --rule-soft: rgba(255, 87, 34, 0.20);
+    --rule-faint: rgba(255, 87, 34, 0.10);
+
+    --text: #fff5e8;
+    --text-secondary: #d4b8a3;
+    --text-tertiary: #9c7a64;
+    --text-quaternary: #5c3d2e;
+
+    --primary: #ff5722;
+    --primary-hover: #ff7a4d;
+    --primary-soft: rgba(255, 87, 34, 0.18);
+
+    --accent: #ff5722;
+    --accent-soft: rgba(255, 87, 34, 0.20);
+
+    --highlight: rgba(255, 87, 34, 0.25);
+    --highlight-text: #ffb892;
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 16px 40px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+  }
+
+  ::selection { background: var(--primary-soft); color: var(--primary); }
+
+  button, input, select { font-family: inherit; }
+
+  /* ===== HEADER ===== */
+  header {
+    border-bottom: 3px solid var(--rule);
+    background: rgba(255, 240, 225, 0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  [data-theme="dark"] header { background: rgba(26, 15, 8, 0.85); }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+  .brand-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .brand-meta {
+    color: var(--text-tertiary);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    background: var(--bg-card);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--rule);
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .icon-btn:hover, .icon-btn:active {
+    background: var(--rule);
+    color: var(--bg);
+  }
+  .icon-btn svg { width: 17px; height: 17px; }
+
+  /* ===== CONTROLS ===== */
+  .controls {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-wrap { position: relative; }
+  .search-wrap > svg {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--text-tertiary);
+    pointer-events: none;
+  }
+  #search {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    border: 1.5px solid var(--rule);
+    background: var(--bg-card);
+    color: var(--text);
+    border-radius: var(--radius);
+    font-size: 16px; /* 16px = no zoom en iOS */
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-xs);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  #search:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--primary-soft);
+  }
+  #search::placeholder { color: var(--text-tertiary); }
+
+  .clear-search {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .clear-search.visible { display: flex; }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--rule);
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--rule);
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-xs);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .filter-pill:active { transform: scale(0.97); }
+  .filter-pill.has-selection {
+    color: var(--bg);
+    background: var(--rule);
+  }
+  .filter-pill.has-selection .count-badge {
+    background: rgba(255, 255, 255, 0.3);
+    color: var(--bg);
+  }
+  .filter-pill svg { width: 15px; height: 15px; }
+  .filter-pill .count-badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--rule);
+    color: var(--bg);
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 2px;
+  }
+  .filter-pill .count-badge:empty { display: none; }
+
+  .clear-all {
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 8px;
+    text-decoration: underline;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .clear-all:active { color: var(--rule); }
+
+  /* ===== POPOVER ===== */
+  .popover-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    background: rgba(26, 15, 8, 0.15);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  [data-theme="dark"] .popover-backdrop { background: rgba(0, 0, 0, 0.6); }
+  .popover-backdrop.open { display: block; }
+
+  .popover {
+    position: absolute;
+    z-index: 101;
+    background: var(--bg-elevated);
+    border: 2px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    min-width: 300px;
+    max-width: calc(100vw - 32px);
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: popIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .popover-search {
+    padding: 10px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .popover-search input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--rule-soft);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    font-size: 16px; /* 16px no zoom iOS */
+    -webkit-appearance: none;
+  }
+  .popover-search input:focus {
+    outline: none;
+    border-color: var(--rule);
+  }
+
+  .popover-list {
+    overflow-y: auto;
+    padding: 6px;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+  }
+  .popover-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--text);
+    font-size: 14px;
+    user-select: none;
+    transition: background 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .popover-item:active { background: var(--bg-hover); }
+
+  .popover-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--rule);
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg);
+  }
+  .popover-item.selected .popover-checkbox {
+    background: var(--rule);
+    border-color: var(--rule);
+  }
+  .popover-checkbox svg {
+    width: 13px; height: 13px;
+    color: var(--bg);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .popover-item.selected .popover-checkbox svg { opacity: 1; }
+
+  .popover-item-label { flex: 1; }
+  .popover-item-count {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .popover-empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 13px;
+  }
+
+  .popover-footer {
+    padding: 8px;
+    border-top: 1px solid var(--rule-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-subtle);
+  }
+  .popover-footer button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .popover-footer button:active { background: var(--bg-hover); color: var(--rule); }
+
+  .date-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  .date-quick-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px 16px 4px;
+    border-bottom: 1px solid var(--rule-soft);
+    margin-bottom: 4px;
+  }
+  .date-chip {
+    padding: 8px 14px;
+    background: var(--bg);
+    border: 1.5px solid var(--rule-soft);
+    color: var(--text-secondary);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .date-chip:active { transform: scale(0.96); }
+  .date-chip.active {
+    background: var(--rule);
+    border-color: var(--rule);
+    color: var(--bg);
+  }
+  .date-chip:hover:not(.active) {
+    border-color: var(--rule);
+    color: var(--rule);
+  }
+  .date-inputs label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .date-inputs input {
+    padding: 10px 12px;
+    border: 1.5px solid var(--rule-soft);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    -webkit-appearance: none;
+  }
+  .date-inputs input:focus {
+    outline: none;
+    border-color: var(--rule);
+  }
+
+  /* ===== RESULTS BAR ===== */
+  .results-bar {
+    max-width: 1280px;
+    margin: 24px auto 0;
+    padding: 14px 18px;
+    border-top: 3px solid var(--rule);
+    border-bottom: 3px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .results-count {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .results-count strong {
+    color: var(--rule);
+    font-weight: 700;
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sort-select {
+    padding: 8px 30px 8px 12px;
+    border: 1.5px solid var(--rule);
+    background: var(--bg-card);
+    color: var(--rule);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 16 16' fill='none' stroke='%23cc3300' stroke-width='2.5'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    box-shadow: var(--shadow-xs);
+  }
+
+  /* ===== NEWS LIST ===== */
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 18px 60px;
+  }
+  .news-list { display: flex; flex-direction: column; }
+
+  .news-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 18px;
+    padding: 24px 0;
+    border-bottom: 3px solid var(--rule);
+    position: relative;
+  }
+  .news-item:last-child { border-bottom: none; }
+
+  .news-date {
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .news-date .day {
+    display: block;
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--rule);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 6px;
+  }
+  .news-date .month-year {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+  }
+
+  .news-content { min-width: 0; }
+  .news-content h2 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .news-summary {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 14px;
+    max-width: 76ch;
+  }
+  .news-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--rule-soft);
+    color: var(--text-secondary);
+    font-size: 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    line-height: 1.3;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tag:active {
+    border-color: var(--rule);
+    color: var(--rule);
+    background: var(--bg-elevated);
+  }
+  .tag.tag-company {
+    background: var(--bg-elevated);
+    color: var(--rule);
+    border-color: var(--rule);
+    font-weight: 600;
+  }
+  .tag.tag-company::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--rule);
+    display: inline-block;
+  }
+  .tag.tag-sector::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+    display: inline-block;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--bg);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 11px 18px;
+    background: var(--rule);
+    border: 2px solid var(--rule);
+    border-radius: 100px;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .read-more:active {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: scale(0.97);
+  }
+  .read-more svg {
+    width: 14px; height: 14px;
+    transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ===== EMPTY / LOADING ===== */
+  .empty, .loading {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--text-tertiary);
+  }
+  .empty h3 {
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .empty p {
+    font-size: 14px;
+    max-width: 400px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+  }
+
+  /* ===== HIGHLIGHT ===== */
+  mark {
+    background: var(--highlight);
+    color: var(--highlight-text);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  /* ===== LOAD MORE ===== */
+  .load-more {
+    display: block;
+    margin: 32px auto 0;
+    padding: 13px 28px;
+    background: var(--bg-card);
+    color: var(--rule);
+    border: 2px solid var(--rule);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .load-more:active {
+    background: var(--rule);
+    color: var(--bg);
+    transform: scale(0.97);
+  }
+
+  /* ===== DESKTOP (≥720px) ===== */
+  @media (min-width: 720px) {
+    body { font-size: 14px; }
+    .header-inner { padding: 18px 32px; }
+    .brand-title { font-size: 22px; }
+    .controls { padding: 28px 32px 0; }
+    .results-bar { padding: 14px 32px; margin-top: 32px; }
+    main { padding: 0 32px 96px; }
+
+    .news-item {
+      grid-template-columns: 150px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+    }
+    .news-date .day { font-size: 72px; }
+    .news-date .month-year { font-size: 12px; }
+    .news-content h2 { font-size: 20px; }
+    .news-summary { font-size: 15px; }
+  }
+
+  /* Animations */
+  .news-item { animation: fadeUp 0.35s ease backwards; }
+  .news-item:nth-child(1) { animation-delay: 0s; }
+  .news-item:nth-child(2) { animation-delay: 0.04s; }
+  .news-item:nth-child(3) { animation-delay: 0.08s; }
+  .news-item:nth-child(4) { animation-delay: 0.12s; }
+  .news-item:nth-child(5) { animation-delay: 0.16s; }
+  .news-item:nth-child(n+6) { animation-delay: 0.2s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01s !important;
+      transition-duration: 0.01s !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <h1 class="brand-title">Noticias CPGs</h1>
+      <span class="brand-meta" id="brand-meta">—</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="controls">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="search" placeholder="Buscar titular, empresa…" autocomplete="off" />
+    <button class="clear-search" id="clear-search" aria-label="Limpiar búsqueda">×</button>
+  </div>
+
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-pill" data-filter="sectors">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M7 12h10M10 18h4"/></svg>
+      <span>Sector</span>
+      <span class="count-badge" id="count-sectors"></span>
+    </button>
+    <button class="filter-pill" data-filter="companies">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+      <span>Empresa</span>
+      <span class="count-badge" id="count-companies"></span>
+    </button>
+    <button class="filter-pill" data-filter="dates">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span>Fecha</span>
+      <span class="count-badge" id="count-dates"></span>
+    </button>
+    <button class="clear-all" id="clear-all" style="display:none">Limpiar</button>
+  </div>
+</section>
+
+<div class="popover-backdrop" id="popover-backdrop"></div>
+<div class="popover" id="popover" style="display:none"></div>
+
+<div class="results-bar">
+  <div class="results-count"><strong id="count">0</strong><span>noticias</span></div>
+  <select class="sort-select" id="sort">
+    <option value="date-desc">Más recientes</option>
+    <option value="date-asc">Más antiguas</option>
+  </select>
+</div>
+
+<main>
+  <div class="news-list" id="news-list">
+    <div class="loading">Cargando…</div>
+  </div>
+</main>
+
+<script>
+  /* ============ DATA INJECTION ============ */
+  const NEWS_DATA = window.__NEWS_DATA__ || [];
+
+  /* ============ STATE ============ */
+  const PAGE_SIZE = 10;
+  const state = {
+    filters: {
+      sectors: new Set(),
+      companies: new Set(),
+    },
+    dateFrom: null,
+    dateTo: null,
+    search: '',
+    sort: 'date-desc',
+    visibleCount: PAGE_SIZE,
+  };
+
+  /* ============ THEME ============ */
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('icon-sun').style.display = theme === 'dark' ? 'block' : 'none';
+    document.getElementById('icon-moon').style.display = theme === 'dark' ? 'none' : 'block';
+  }
+  function getInitialTheme() {
+    try {
+      const saved = localStorage.getItem('cpgs-theme');
+      if (saved) return saved;
+    } catch (e) {}
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  applyTheme(getInitialTheme());
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('cpgs-theme', next); } catch (e) {}
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    try {
+      if (!localStorage.getItem('cpgs-theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    } catch (err) {}
+  });
+
+  /* ============ INIT ============ */
+  function init() {
+    if (!NEWS_DATA.length) {
+      document.getElementById('news-list').innerHTML =
+        '<div class="empty"><h3>Sin datos</h3><p>No se han podido cargar las noticias.</p></div>';
+      return;
+    }
+    updateBrandMeta();
+    render();
+  }
+
+  function updateBrandMeta() {
+    const dates = NEWS_DATA.map(n => n.date).filter(Boolean).sort();
+    const latest = dates[dates.length - 1];
+    if (!latest) return;
+    const d = new Date(latest);
+    document.getElementById('brand-meta').textContent =
+      d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  /* ============ FACETS ============ */
+  function buildFacets(field) {
+    const counts = new Map();
+    NEWS_DATA.forEach(n => {
+      if (!matchesFilters(n, field)) return;
+      (n[field] || []).forEach(v => {
+        if (!v) return;
+        counts.set(v, (counts.get(v) || 0) + 1);
+      });
+    });
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }
+
+  /* ============ FILTER LOGIC ============ */
+  function matchesFilters(n, exclude = null) {
+    if (exclude !== 'sectors' && state.filters.sectors.size > 0) {
+      if (!(n.sectors || []).some(s => state.filters.sectors.has(s))) return false;
+    }
+    if (exclude !== 'companies' && state.filters.companies.size > 0) {
+      if (!(n.companies || []).some(c => state.filters.companies.has(c))) return false;
+    }
+    if (exclude !== 'dates') {
+      if (state.dateFrom && n.date && n.date.slice(0, 10) < state.dateFrom) return false;
+      if (state.dateTo && n.date && n.date.slice(0, 10) > state.dateTo) return false;
+    }
+    if (exclude !== 'search' && state.search) {
+      const q = state.search.toLowerCase();
+      const hay = ((n.title || '') + ' ' + (n.summary || '') + ' ' +
+                   (n.companies || []).join(' ') + ' ' +
+                   (n.sectors || []).join(' ')).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  }
+
+  function getFiltered() {
+    return NEWS_DATA.filter(n => matchesFilters(n));
+  }
+
+  /* ============ RENDER ============ */
+  function render() {
+    const filtered = getFiltered();
+
+    filtered.sort((a, b) => {
+      const da = a.date || '';
+      const db = b.date || '';
+      return state.sort === 'date-asc' ? da.localeCompare(db) : db.localeCompare(da);
+    });
+
+    document.getElementById('count').textContent = filtered.length.toLocaleString('es-ES');
+
+    document.getElementById('count-sectors').textContent = state.filters.sectors.size || '';
+    document.getElementById('count-companies').textContent = state.filters.companies.size || '';
+    document.getElementById('count-dates').textContent = (state.dateFrom || state.dateTo) ? '•' : '';
+
+    document.querySelectorAll('.filter-pill').forEach(p => {
+      const f = p.dataset.filter;
+      let active = false;
+      if (f === 'dates') active = state.dateFrom || state.dateTo;
+      else active = state.filters[f] && state.filters[f].size > 0;
+      p.classList.toggle('has-selection', !!active);
+    });
+
+    const anyActive = state.filters.sectors.size + state.filters.companies.size > 0
+                      || state.dateFrom || state.dateTo || state.search;
+    document.getElementById('clear-all').style.display = anyActive ? 'inline-flex' : 'none';
+
+    const list = document.getElementById('news-list');
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty"><h3>Sin resultados</h3><p>Prueba a ajustar los filtros o la búsqueda.</p></div>`;
+      return;
+    }
+
+    const visible = filtered.slice(0, state.visibleCount);
+    const moreBtn = filtered.length > state.visibleCount
+      ? `<button class="load-more" id="load-more">Mostrar más · ${(filtered.length - state.visibleCount).toLocaleString('es-ES')} restantes</button>`
+      : '';
+
+    list.innerHTML = visible.map(renderItem).join('') + moreBtn;
+
+    const btn = document.getElementById('load-more');
+    if (btn) btn.addEventListener('click', () => {
+      state.visibleCount += PAGE_SIZE;
+      render();
+    });
+
+    list.querySelectorAll('.tag[data-toggle]').forEach(el => {
+      el.addEventListener('click', () => {
+        const kind = el.dataset.toggle;
+        const value = el.dataset.value;
+        if (state.filters[kind].has(value)) state.filters[kind].delete(value);
+        else state.filters[kind].add(value);
+        state.visibleCount = PAGE_SIZE;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
+
+  function renderItem(n) {
+    let day = '–', monthYear = '';
+    if (n.date) {
+      const d = new Date(n.date);
+      day = d.getDate();
+      const month = d.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').toUpperCase();
+      monthYear = `${month}<br>${d.getFullYear()}`;
+    }
+    const title = state.search ? highlight(n.title, state.search) : escapeHtml(n.title);
+    const summary = n.summary
+      ? (state.search ? highlight(n.summary, state.search) : escapeHtml(n.summary))
+      : '';
+
+    const sectorTags = (n.sectors || []).map(s =>
+      `<button class="tag tag-sector" data-toggle="sectors" data-value="${escapeAttr(s)}">${escapeHtml(s)}</button>`
+    ).join('');
+    const companyTags = (n.companies || []).map(c =>
+      `<button class="tag tag-company" data-toggle="companies" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`
+    ).join('');
+
+    const button = n.url
+      ? `<a class="read-more" href="${escapeAttr(n.url)}" target="_blank" rel="noopener">Leer noticia<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>`
+      : '';
+
+    return `
+      <article class="news-item">
+        <div class="news-date">
+          <span class="day">${day}</span>
+          <span class="month-year">${monthYear}</span>
+        </div>
+        <div class="news-content">
+          <h2>${title}</h2>
+          ${summary ? `<p class="news-summary">${summary}</p>` : ''}
+          ${(companyTags || sectorTags) ? `<div class="news-tags">${companyTags}${sectorTags}</div>` : ''}
+          ${button}
+        </div>
+      </article>`;
+  }
+
+  /* ============ POPOVER ============ */
+  const popover = document.getElementById('popover');
+  const backdrop = document.getElementById('popover-backdrop');
+
+  function openPopover(filterKey, anchorEl) {
+    if (filterKey === 'dates') return openDatesPopover(anchorEl);
+
+    const facets = buildFacets(filterKey);
+    const selected = state.filters[filterKey];
+    const labels = { sectors: 'sector', companies: 'empresa' };
+
+    let html = '';
+    if (facets.length > 8) {
+      html += `<div class="popover-search"><input type="text" id="popover-input" placeholder="Buscar ${labels[filterKey]}…" autocomplete="off"/></div>`;
+    }
+    html += `<div class="popover-list" id="popover-list"></div>`;
+    html += `<div class="popover-footer">
+      <button id="popover-clear">Limpiar</button>
+      <button id="popover-close">Cerrar</button>
+    </div>`;
+    popover.innerHTML = html;
+
+    const listEl = popover.querySelector('#popover-list');
+    function renderList(query = '') {
+      const filtered = facets.filter(([v]) => !query || v.toLowerCase().includes(query.toLowerCase()));
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="popover-empty">Sin resultados</div>`;
+        return;
+      }
+      listEl.innerHTML = filtered.map(([v, count]) => `
+        <div class="popover-item ${selected.has(v) ? 'selected' : ''}" data-value="${escapeAttr(v)}">
+          <div class="popover-checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="popover-item-label">${escapeHtml(v)}</span>
+          <span class="popover-item-count">${count}</span>
+        </div>
+      `).join('');
+      listEl.querySelectorAll('.popover-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const v = el.dataset.value;
+          if (selected.has(v)) selected.delete(v);
+          else selected.add(v);
+          el.classList.toggle('selected');
+          state.visibleCount = PAGE_SIZE;
+          render();
+        });
+      });
+    }
+    renderList('');
+    const inp = popover.querySelector('#popover-input');
+    if (inp) {
+      inp.addEventListener('input', e => renderList(e.target.value));
+      // Solo autofocus en desktop (en móvil es molesto - abre el teclado)
+      if (window.innerWidth >= 720) {
+        setTimeout(() => inp.focus(), 80);
+      }
+    }
+    popover.querySelector('#popover-clear').addEventListener('click', () => {
+      selected.clear();
+      renderList(inp ? inp.value : '');
+      state.visibleCount = PAGE_SIZE;
+      render();
+    });
+    popover.querySelector('#popover-close').addEventListener('click', closePopover);
+
+    showPopover(anchorEl);
+  }
+
+  function openDatesPopover(anchorEl) {
+    popover.innerHTML = `
+      <div class="date-quick-filters">
+        <button class="date-chip" data-range="today">Hoy</button>
+        <button class="date-chip" data-range="yesterday">Ayer</button>
+        <button class="date-chip" data-range="week">Última semana</button>
+        <button class="date-chip" data-range="month">Último mes</button>
+      </div>
+      <div class="date-inputs">
+        <label>Desde
+          <input type="date" id="date-from-input" value="${state.dateFrom || ''}"/>
+        </label>
+        <label>Hasta
+          <input type="date" id="date-to-input" value="${state.dateTo || ''}"/>
+        </label>
+      </div>
+      <div class="popover-footer">
+        <button id="popover-clear">Limpiar</button>
+        <button id="popover-close">Cerrar</button>
+      </div>`;
+
+    const fromInput = popover.querySelector('#date-from-input');
+    const toInput = popover.querySelector('#date-to-input');
+
+    function applyQuickRange(range) {
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0, 10);
+      let from, to;
+
+      if (range === 'today') {
+        from = to = todayStr;
+      } else if (range === 'yesterday') {
+        const y = new Date(today);
+        y.setDate(y.getDate() - 1);
+        from = to = y.toISOString().slice(0, 10);
+      } else if (range === 'week') {
+        const w = new Date(today);
+        w.setDate(w.getDate() - 7);
+        from = w.toISOString().slice(0, 10);
+        to = todayStr;
+      } else if (range === 'month') {
+        const m = new Date(today);
+        m.setMonth(m.getMonth() - 1);
+        from = m.toISOString().slice(0, 10);
+        to = todayStr;
+      }
+
+      state.dateFrom = from;
+      state.dateTo = to;
+      fromInput.value = from;
+      toInput.value = to;
+      updateChipStates();
+      state.visibleCount = PAGE_SIZE;
+      render();
+    }
+
+    function updateChipStates() {
+      // Marca como activo el chip que coincide con el rango actual
+      const today = new Date();
+      const todayStr = today.toISOString().slice(0, 10);
+      popover.querySelectorAll('.date-chip').forEach(chip => {
+        const range = chip.dataset.range;
+        let from, to;
+        if (range === 'today') {
+          from = to = todayStr;
+        } else if (range === 'yesterday') {
+          const y = new Date(today); y.setDate(y.getDate() - 1);
+          from = to = y.toISOString().slice(0, 10);
+        } else if (range === 'week') {
+          const w = new Date(today); w.setDate(w.getDate() - 7);
+          from = w.toISOString().slice(0, 10); to = todayStr;
+        } else if (range === 'month') {
+          const m = new Date(today); m.setMonth(m.getMonth() - 1);
+          from = m.toISOString().slice(0, 10); to = todayStr;
+        }
+        const isActive = state.dateFrom === from && state.dateTo === to;
+        chip.classList.toggle('active', isActive);
+      });
+    }
+
+    popover.querySelectorAll('.date-chip').forEach(chip => {
+      chip.addEventListener('click', () => applyQuickRange(chip.dataset.range));
+    });
+
+    fromInput.addEventListener('change', e => {
+      state.dateFrom = e.target.value || null;
+      updateChipStates();
+      state.visibleCount = PAGE_SIZE;
+      render();
+    });
+    toInput.addEventListener('change', e => {
+      state.dateTo = e.target.value || null;
+      updateChipStates();
+      state.visibleCount = PAGE_SIZE;
+      render();
+    });
+    popover.querySelector('#popover-clear').addEventListener('click', () => {
+      state.dateFrom = null;
+      state.dateTo = null;
+      fromInput.value = '';
+      toInput.value = '';
+      updateChipStates();
+      state.visibleCount = PAGE_SIZE;
+      render();
+    });
+    popover.querySelector('#popover-close').addEventListener('click', closePopover);
+
+    updateChipStates();
+    showPopover(anchorEl);
+  }
+
+  function showPopover(anchorEl) {
+    popover.style.display = 'flex';
+    backdrop.classList.add('open');
+    const r = anchorEl.getBoundingClientRect();
+    const top = window.scrollY + r.bottom + 8;
+    let left = window.scrollX + r.left;
+    popover.style.top = top + 'px';
+    popover.style.left = left + 'px';
+    requestAnimationFrame(() => {
+      const pr = popover.getBoundingClientRect();
+      // Centrar en móvil
+      if (window.innerWidth < 720) {
+        popover.style.left = '16px';
+        popover.style.right = '16px';
+      } else if (pr.right > window.innerWidth - 16) {
+        popover.style.left = (window.innerWidth - pr.width - 16) + 'px';
+      }
+    });
+  }
+
+  function closePopover() {
+    popover.style.display = 'none';
+    backdrop.classList.remove('open');
+  }
+  backdrop.addEventListener('click', closePopover);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closePopover();
+  });
+
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      openPopover(pill.dataset.filter, pill);
+    });
+  });
+
+  /* ============ SEARCH ============ */
+  let searchTimer;
+  const searchInput = document.getElementById('search');
+  const clearSearchBtn = document.getElementById('clear-search');
+  searchInput.addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    clearSearchBtn.classList.toggle('visible', !!e.target.value);
+    searchTimer = setTimeout(() => {
+      state.search = e.target.value.trim();
+      state.visibleCount = PAGE_SIZE;
+      render();
+    }, 130);
+  });
+  clearSearchBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    state.search = '';
+    clearSearchBtn.classList.remove('visible');
+    state.visibleCount = PAGE_SIZE;
+    render();
+  });
+
+  /* ============ CLEAR ALL ============ */
+  document.getElementById('clear-all').addEventListener('click', () => {
+    state.filters.sectors.clear();
+    state.filters.companies.clear();
+    state.dateFrom = null;
+    state.dateTo = null;
+    state.search = '';
+    searchInput.value = '';
+    clearSearchBtn.classList.remove('visible');
+    state.visibleCount = PAGE_SIZE;
+    render();
+  });
+
+  /* ============ SORT ============ */
+  document.getElementById('sort').addEventListener('change', e => {
+    state.sort = e.target.value;
+    render();
+  });
+
+  /* ============ UTILS ============ */
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function escapeAttr(s) { return escapeHtml(s); }
+  function highlight(text, query) {
+    const safe = escapeHtml(text);
+    if (!query) return safe;
+    const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return safe.replace(re, '<mark>$1</mark>');
+  }
+
+  init();
+</script>
+
+</body>
+</html>
