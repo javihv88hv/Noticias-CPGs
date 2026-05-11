@@ -25,7 +25,7 @@ def collect_from_dir(directory):
         return items
     for root, _, files in os.walk(directory):
         for fname in files:
-            if not fname.endswith('.msg'):
+            if not fname.endswith(('.msg', '.eml')):
                 continue
             path = os.path.join(root, fname)
             try:
