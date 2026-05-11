@@ -3,7 +3,7 @@ name: Actualizar noticias CPGs
 on:
   # Se ejecuta automáticamente cada noche a las 23:00 UTC (00:00 hora España invierno, 01:00 verano)
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 10 * * *'
   # Permite ejecutarlo a mano desde la pestaña Actions
   workflow_dispatch:
 
